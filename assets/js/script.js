@@ -35,16 +35,21 @@ var formSubmitHandler = function (event) {
     }
     console.log(event);
 };
+//clear old content from container
+currentWeatherContainer.textContent = "";
 
 //FUNCTION to display weather
 var displayCurrentWeather = function (weather) {
     console.log(weather);
     console.log(city);
 
-    //clear old content from container
-    currentWeatherContainer.textContent = "";
+    //format weather info
+    var cityInfo = weather[i].name;
 
-    //
+    //create conatiner for current weather
+    var currentCityEl = document.createElement("div");
+    currentWeatherContainer.classList = "list-item flex-row justify-space-between align-center";
+
 
 }
 
