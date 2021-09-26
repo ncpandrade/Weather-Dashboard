@@ -1,11 +1,8 @@
-//create a variable called 'city' to be used in api Url
-// var city = document.querySelector('#cityname').value;
-// console.log(city);
 
 //get user City function
-var getUserWeather = function() {
+var getUserWeather = function(city) {
     //format the weather api url
-    var apiUrl = 'api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=0709fe582a3226805c5caaebd2b415a5'
+    var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=0709fe582a3226805c5caaebd2b415a5'
     
     //make a request to the url concatenating 'city' value
     fetch(apiUrl)
@@ -13,7 +10,7 @@ var getUserWeather = function() {
              return response.json();
     })
         .then(function(response) {
-             console.log(response.data[0]);
+             console.log(response);
         });
 }
 //variables to store a reference to the <form> element using each id
@@ -26,12 +23,12 @@ var formSubmitHandler = function(event) {
     // get value from input element
     var city = cityInputEl.value.trim();
     console.log(city);
-    //check if citiname was entered
+    //check if cityname was entered
     if (city) {
-        //if yes, pass username into getUserRepos()
+        //if yes, pass cityname into getUserWeather()
         getUserWeather(city);
         //clear value from the <input> element
-        nameInputEl.value = "";
+        cityInputEl.value = "";
 }   else {
         alert("Please enter a City name");
 }
