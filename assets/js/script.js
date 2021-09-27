@@ -14,23 +14,38 @@ var getUserWeather = function (city) {
     fetch(apiUrl).then(function (response) {
         response.json().then(function (data) {
             displayCurrentWeather(data, city);
-        });
 
+            //get city coordinates
+            var coordLat = weather.coord.lat;
+            var coordLon = weather.coord.lon;
+            console.log(coordLat, coordLon);
+
+            //return fetch request to the one call api with the coordinates
+            return fetch(
+                'https://api.openweathermap.org/data/2.5/onecall?lat=' +coordLat + '&lon=' + coordLan + '&exclude=current, minutely,hourly, alerts&appid=0709fe582a3226805c5caaebd2b415a5'
+            );
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(reponse) {
+            console.log(response);
+        });
     });
 }
-//FUNCTION to make api request for forecast info
-var getForecast = function () {
-    //format forecast api
-    var forecastApiUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +coordLat + '&lon=' + coordLan + '&exclude=current, minutely,hourly, alerts&appid=0709fe582a3226805c5caaebd2b415a5';
-    
-    //make fetch request concatenating coordLat and coordLon
-    fetch(forecastApiUrl).then(function (response){
-        response.json().then(function () {
-            console.log(response);
-        })
-    })
-}
 
+// //FUNCTION to make api request for forecast info
+// var getForecast = function () {
+//     //format forecast api
+//     var forecastApiUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +coordLat + '&lon=' + coordLan + '&exclude=current, minutely,hourly, alerts&appid=0709fe582a3226805c5caaebd2b415a5';
+    
+//     //make fetch request concatenating coordLat and coordLon
+//     fetch(forecastApiUrl).then(function (response){
+//         response.json().then(function () {
+//             console.log(response);
+//         })
+//     })
+// }
 
 //Function to obtain city input on button click
 var formSubmitHandler = function (event) {
@@ -65,11 +80,6 @@ var displayCurrentWeather = function (weather) {
     //format today's weather info
     var weatherInfo = weather.main.temp + weather.wind.speed + weather.main.humidity;
 
-    //get city coordinates
-    var coordLat = weather.coord.lat;
-    var coordLon = weather.coord.lon;
-    console.log(coordLat, coordLon);
-    
     //create container for current weather
     var currentWeatherEl = document.createElement("div");
     currentWeatherEl.classList = "list-item flex-row justify-space-between align-center";
