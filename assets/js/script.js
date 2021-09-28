@@ -12,8 +12,8 @@ var getUserWeather = function (city) {
     var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=0709fe582a3226805c5caaebd2b415a5'
 
     //make a request to the url concatenating 'city' value
-    fetch(apiUrl).then(function (response) {
-        response.json().then(function (data) {
+    fetch(apiUrl).then(function (weatherResponse) {
+        weatherResponse.json().then(function (data) {
             displayCurrentWeather(data, city);
 
             //get city coordinates from returend object
@@ -26,12 +26,12 @@ var getUserWeather = function (city) {
                 'https://api.openweathermap.org/data/2.5/onecall?lat=' + coordLat + '&lon=' + coordLon + '&exclude=current, minutely,hourly, alerts&appid=0709fe582a3226805c5caaebd2b415a5'
             );
         })
-            .then(function (response) {
-                return response.json();
+            .then(function (forecastResponse) {
+                return forecastResponse.json();
             })
-            .then(function (response) {
-                console.log(response);
-                displayForecast();
+            .then(function (forecastResponse) {
+                console.log(forecastResponse);
+                displayForecast(forecastResponse);
             });
     });
 }
@@ -89,16 +89,18 @@ var displayCurrentWeather = function (weather) {
     currentWeatherContainer.appendChild(todaysWeatherInfoEl);
 }
 //FUNCTION to display forecast weather
-var displayForecast = function (weather) {
+var displayForecast = function (forecastArr) {
     //clear old content
     forecastContainer.textContent = "";
 
     //loop over forecast days max 5
     for (var i = 0; i < 5; i++) {
-
-        //format forecast info temp,humidity,wind
-        var forecastInfo = weather.daily[i].temp.day;
-        console.log(forecastInfo);
+        //create variable to hold temp,wind,humidity
+        var forecastTemp = "Temp: " + forecastArr.daily[i].temp.day;
+        var forecastWind = "Wind: " + forecastArr.daily[i].weather[0].wind_speed;
+        var forecastHum = "Humindity: " + forecastArr.daily[i].weather.feels_like.humidity;
+        
+        console.log(forecastTemp, forecastWind, forecastHum);
 
         // //create a container for each forecast day
         // var forecastEl = document.createElement("div");
