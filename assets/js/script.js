@@ -93,6 +93,15 @@ var displayCurrentWeather = function (weather) {
     //append to currentWeatherContainer DOM
     currentWeatherContainer.appendChild(currentCityEl);
 
+    //create icon element
+    var weatherIconEl = document.createElement("img");
+    //get icon code
+    var weatherIconCode = weather.weather[0].icon;
+    //insert icon to image element
+    weatherIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/' + weatherIconCode + '@2x.png');
+    //append to currentWeatherContainer DOM
+    currentWeatherContainer.appendChild(weatherIconEl);
+
     //create container for today's weather info
     var todaysWeatherInfoEl = document.createElement("div");
     todaysWeatherInfoEl.textContent = 'Temp: ' + tempInfo + 'Wind: ' + windInfo + 'Humidity: ' + humInfo;
@@ -137,12 +146,15 @@ var displayForecast = function (forecastArr) {
         // //append to container
         forecastEl.appendChild(dateEl);
 
-        // //create icon element
-        // var iconEl = document.createElement("span");
-        // //insert icon
+        //create icon element
+        var iconEl = document.createElement("img");
+        //get icon code
+        var iconCode = forecastArr.daily[i].weather[0].icon;
+        //insert icon to image element
+        iconEl.setAttribute('src', 'http://openweathermap.org/img/wn/' + iconCode + '@2x.png');
 
-        // //append to container
-        // forecastEl.appendchile(iconEl);
+        //append to container
+        forecastEl.appendChild(iconEl);
 
         //create div element for weather details
         var forecastInfoEl = document.createElement("div");
