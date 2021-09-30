@@ -60,8 +60,11 @@ var formSubmitHandler = function (event) {
 
 //add city to search history
 var createHistory = function (city) {
-    //save value of city to localstorage
-    localStorage.setItem('cityHistory', city);
+    //create an array of user entered cities to be stored as history
+    var cityArray = [];
+    cityArray.push(city);
+    //save value of city array to localstorage
+    localStorage.setItem('cityHistory', JSON.stringify(cityArray));
     //create div for each city search
     var searchedCityEl = document.createElement('div');
     searchedCityEl.textContent = city;
