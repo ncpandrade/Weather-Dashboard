@@ -4,6 +4,7 @@ var cityInputEl = document.querySelector("#cityname");
 //variables to reference DOM elements
 var currentWeatherContainer = document.querySelector('#weatherCurrent');
 var forecastContainer = document.querySelector('#forecast-container');
+var searchHistory = document.querySelector('#searchHistory');
 
 
 //get user Weather function
@@ -47,6 +48,7 @@ var formSubmitHandler = function (event) {
     if (city) {
         //if yes, pass cityname into getUserWeather()
         getUserWeather(city);
+        createHistory(city);
         //clear value from the <input> element
         cityInputEl.value = "";
     } else {
@@ -55,12 +57,26 @@ var formSubmitHandler = function (event) {
 
     console.log(event);
 };
-// clear old content from container
-currentWeatherContainer.textContent = "";
+
+//add city to search history
+var createHistory = function (city) {
+    //save value of city to localstorage
+    localStorage.setItem('cityHistory', city);
+    //create div for each city search
+    var searchedCityEl = document.createElement('div');
+    searchedCityEl.textContent = city;
+    
+    //append to searchHistory DOM
+    searchHistory.appendChild(searchedCityEl);
+}
+
 
 //FUNCTION to display CURRENT WEATHER
 var displayCurrentWeather = function (weather) {
     console.log(weather);
+
+    // clear old content from container
+    currentWeatherContainer.textContent = "";
 
     //format forecastDateUnix to regular date
     function convertTimestamp() {
