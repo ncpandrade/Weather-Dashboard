@@ -65,12 +65,17 @@ var createHistory = function (city) {
     cityArray.push(city);
     //save value of city array to localstorage
     localStorage.setItem('cityHistory', JSON.stringify(cityArray));
-    //create div for each city search
+
+    //retrieve array data from local storage and console.log
+
+    //create div for each city search/display from array
     var searchedCityEl = document.createElement('div');
     searchedCityEl.textContent = city;
     
     //append to searchHistory DOM
     searchHistory.appendChild(searchedCityEl);
+
+    //create event listener to search for history city
 }
 
 
