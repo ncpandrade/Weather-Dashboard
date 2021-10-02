@@ -60,22 +60,31 @@ var formSubmitHandler = function (event) {
 
 //add city to search history
 var createHistory = function (city) {
+
     //create an array of user entered cities to be stored as history
-    var cityArray = [];
+    var cityArray = JSON.parse(localStorage.getItem('cityHistory'));
     cityArray.push(city);
+
     //save value of city array to localstorage
     localStorage.setItem('cityHistory', JSON.stringify(cityArray));
-
-    //retrieve array data from local storage and console.log
-
-    //create div for each city search/display from array
-    var searchedCityEl = document.createElement('div');
-    searchedCityEl.textContent = city;
     
-    //append to searchHistory DOM
-    searchHistory.appendChild(searchedCityEl);
+    console.log(cityArray);
+    
+    //retrieve array data from local storage and console.log
+    var retrievedData = localStorage.getItem("cityHistory");
+    var cityArray2 = JSON.parse(retrievedData);
 
-    //create event listener to search for history city
+    //create loop to display????
+    for ( i = 0; i < 10; i++) {
+
+        //create div for each city search/display from array
+        var searchedCityEl = document.createElement('button');
+        searchedCityEl.classList = "city-item"
+        searchedCityEl.textContent = cityArray2[i];
+        
+        //append to searchHistory DOM
+        searchHistory.appendChild(searchedCityEl);
+    }
 }
 
 
@@ -139,8 +148,6 @@ var displayForecast = function (forecastArr) {
     //clear old content
     forecastContainer.textContent = "";
 
-
-
     //loop over forecast days max 5
     for (var i = 1; i < 6; i++) {
         //create variable to hold temp,wind,humidity, date
@@ -153,11 +160,8 @@ var displayForecast = function (forecastArr) {
             dateObj = new Date(unixTimestamp * 1000);
             utcString = dateObj.toUTCString();
             forecastDate = dateObj.toLocaleDateString();
-
         }
         convertTimestamp();
-
-        console.log(forecastDate, forecastTemp, forecastWind, forecastHum);
 
         // //create a container for each forecast day
         var forecastEl = document.createElement("div");
@@ -189,11 +193,10 @@ var displayForecast = function (forecastArr) {
 
         //append forecastEl to forecastContainer
         forecastContainer.appendChild(forecastEl);
-
-
-
     }
 }
 
 // submit event listener - when user clicks Get City formSubmitHandler is activated
 userFormEl.addEventListener("submit", formSubmitHandler);
+//event listener for search history buttons
+
