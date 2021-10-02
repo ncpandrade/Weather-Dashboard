@@ -63,7 +63,7 @@ var createHistory = function (city) {
 
     //create an array of user entered cities to be stored as history
     var cityArray = JSON.parse(localStorage.getItem('cityHistory'));
-    cityArray.push(city);
+    cityArray.unshift(city);
 
     //save value of city array to localstorage
     localStorage.setItem('cityHistory', JSON.stringify(cityArray));
@@ -84,6 +84,9 @@ var createHistory = function (city) {
         
         //append to searchHistory DOM
         searchHistory.appendChild(searchedCityEl);
+
+        //event listener for search history buttons
+        searchedCityEl.addEventListener("submit", console.log(cityArray2[i]));
     }
 }
 
@@ -198,5 +201,4 @@ var displayForecast = function (forecastArr) {
 
 // submit event listener - when user clicks Get City formSubmitHandler is activated
 userFormEl.addEventListener("submit", formSubmitHandler);
-//event listener for search history buttons
 
