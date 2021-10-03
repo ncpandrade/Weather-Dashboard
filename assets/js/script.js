@@ -60,10 +60,10 @@ var formSubmitHandler = function (event) {
 
 //add city to search history
 var createHistory = function (city) {
-
+    
     //create an array of user entered cities to be stored as history
-    var cityArray = JSON.parse(localStorage.getItem('cityHistory'));
-    cityArray.unshift(city);
+    var cityArray = JSON.parse(localStorage.getItem('cityHistory')) || [];
+    cityArray.push(city);
 
     //save value of city array to localstorage
     localStorage.setItem('cityHistory', JSON.stringify(cityArray));
@@ -75,19 +75,19 @@ var createHistory = function (city) {
     var cityArray2 = JSON.parse(retrievedData);
 
     //create loop to display????
-    for ( i = 0; i < 10; i++) {
+    // for ( i = 0; i < cityArray2.length; i++) {
 
         //create div for each city search/display from array
         var searchedCityEl = document.createElement('button');
         searchedCityEl.classList = "city-item"
-        searchedCityEl.textContent = cityArray2[i];
+        searchedCityEl.textContent = city;
         
         //append to searchHistory DOM
         searchHistory.appendChild(searchedCityEl);
 
         //event listener for search history buttons
-        searchedCityEl.addEventListener("submit", console.log(cityArray2[i]));
-    }
+        searchedCityEl.addEventListener("submit", console.log(city));
+    // }
 }
 
 
