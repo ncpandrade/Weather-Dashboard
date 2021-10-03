@@ -140,7 +140,7 @@ var displayCurrentWeather = function (weather) {
 
     //create container for today's weather info
     var todaysWeatherInfoEl = document.createElement("div");
-    todaysWeatherInfoEl.textContent = 'Temp: ' + tempInfo + 'Wind: ' + windInfo + 'Humidity: ' + humInfo;
+    todaysWeatherInfoEl.textContent = 'Temp: ' + tempInfo + ' ' + 'Wind: ' + windInfo + ' ' + 'Humidity: ' + humInfo;
 
     //append to currentWeatherContainer DOM
     currentWeatherContainer.appendChild(todaysWeatherInfoEl);
@@ -189,7 +189,7 @@ var displayForecast = function (forecastArr) {
 
         //create div element for weather details
         var forecastInfoEl = document.createElement("div");
-        forecastInfoEl.textContent = forecastTemp + forecastWind + forecastHum;
+        forecastInfoEl.textContent = forecastTemp + ' ' + forecastWind + ' ' + forecastHum;
 
         //append forecastInfoEl to forecastEl container
         forecastEl.appendChild(forecastInfoEl);
