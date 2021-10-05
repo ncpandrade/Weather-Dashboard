@@ -8,33 +8,36 @@ var searchHistory = document.querySelector('#searchHistory');
 
 
 //get user Weather function
-var getUserWeather = function (city) {
+var getUserWeather = async function (city) {
+    var calcWeather = async (weatherResponse) => {
+        var displayWeather = async function (data)
+        {
+           //get city coordinates from returend object
+           var coordLat = data.coord.lat;
+           var coordLon = data.coord.lon;
+           console.log(coordLat, coordLon);
+
+           //return fetch request to the one call api with the coordinates 
+           var forecast = await fetch(
+               'https://api.openweathermap.org/data/2.5/onecall?lat=' + coordLat + '&lon=' + coordLon + '&units=imperial&exclude=current, minutely,hourly, alerts&appid=0709fe582a3226805c5caaebd2b415a5'
+           );
+           var forecastJSON = await forecast.json();
+           console.dir(forecastJSON.daily[0].uvi)
+           displayCurrentWeather(data, forecastJSON.daily[0].uvi);
+           displayForecast(forecastJSON);
+       }
+
+        var weatherResponseJSON = await weatherResponse.json();
+        displayWeather(weatherResponseJSON);        
+   }
     //format the weather api url
     var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=0709fe582a3226805c5caaebd2b415a5'
 
     //make a request to the url concatenating 'city' value
-    fetch(apiUrl).then(function (weatherResponse) {
-        weatherResponse.json().then(function (data) {
-            displayCurrentWeather(data, city);
+    var weatherResponse = await fetch(apiUrl)
+    calcWeather(weatherResponse);
 
-            //get city coordinates from returend object
-            var coordLat = data.coord.lat;
-            var coordLon = data.coord.lon;
-            console.log(coordLat, coordLon);
-
-            //return fetch request to the one call api with the coordinates 
-            return fetch(
-                'https://api.openweathermap.org/data/2.5/onecall?lat=' + coordLat + '&lon=' + coordLon + '&units=imperial&exclude=current, minutely,hourly, alerts&appid=0709fe582a3226805c5caaebd2b415a5'
-            );
-        })
-            .then(function (forecastResponse) {
-                return forecastResponse.json();
-            })
-            .then(function (forecastResponse) {
-                console.log(forecastResponse);
-                displayForecast(forecastResponse);
-            });
-    });
+     
 }
 
 
@@ -81,18 +84,18 @@ var createHistory = function (city) {
         var searchedCityEl = document.createElement('button');
         searchedCityEl.classList = "city-item"
         searchedCityEl.textContent = city;
-        
+        searchedCityEl.onclick = () => getUserWeather(city);
         //append to searchHistory DOM
         searchHistory.appendChild(searchedCityEl);
 
         //event listener for search history buttons
-        searchedCityEl.addEventListener("submit", console.log(city));
+        //searchedCityEl.addEventListener("click", console.log("city"));
     // }
 }
 
 
 //FUNCTION to display CURRENT WEATHER
-var displayCurrentWeather = function (weather) {
+var displayCurrentWeather = function (weather , uvi) {
     console.log(weather);
 
     // clear old content from container
@@ -116,6 +119,7 @@ var displayCurrentWeather = function (weather) {
     var tempInfo = weather.main.temp;
     var windInfo = weather.wind.speed;
     var humInfo = weather.main.humidity;
+    
     //UV info here
 
     //create container for current weather
@@ -140,7 +144,7 @@ var displayCurrentWeather = function (weather) {
 
     //create container for today's weather info
     var todaysWeatherInfoEl = document.createElement("div");
-    todaysWeatherInfoEl.textContent = 'Temp: ' + tempInfo + ' ' + 'Wind: ' + windInfo + ' ' + 'Humidity: ' + humInfo;
+    todaysWeatherInfoEl.textContent = 'Temp: ' + tempInfo + ' ' + 'Wind: ' + windInfo + ' ' + 'Humidity: ' + humInfo + 'UV: ' + uvi; 
 
     //append to currentWeatherContainer DOM
     currentWeatherContainer.appendChild(todaysWeatherInfoEl);
