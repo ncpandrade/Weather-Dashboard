@@ -10,26 +10,25 @@ var searchHistory = document.querySelector('#searchHistory');
 //get user Weather function
 var getUserWeather = async function (city) {
     var calcWeather = async (weatherResponse) => {
-        var displayWeather = async function (data)
-        {
-           //get city coordinates from returend object
-           var coordLat = data.coord.lat;
-           var coordLon = data.coord.lon;
-           console.log(coordLat, coordLon);
+        var displayWeather = async function (data) {
+            //get city coordinates from returend object
+            var coordLat = data.coord.lat;
+            var coordLon = data.coord.lon;
+            console.log(coordLat, coordLon);
 
-           //return fetch request to the one call api with the coordinates 
-           var forecast = await fetch(
-               'https://api.openweathermap.org/data/2.5/onecall?lat=' + coordLat + '&lon=' + coordLon + '&units=imperial&exclude=current, minutely,hourly, alerts&appid=0709fe582a3226805c5caaebd2b415a5'
-           );
-           var forecastJSON = await forecast.json();
-           console.dir(forecastJSON.daily[0].uvi)
-           displayCurrentWeather(data, forecastJSON.daily[0].uvi);
-           displayForecast(forecastJSON);
-       }
+            //return fetch request to the one call api with the coordinates 
+            var forecast = await fetch(
+                'https://api.openweathermap.org/data/2.5/onecall?lat=' + coordLat + '&lon=' + coordLon + '&units=imperial&exclude=current, minutely,hourly, alerts&appid=0709fe582a3226805c5caaebd2b415a5'
+            );
+            var forecastJSON = await forecast.json();
+            console.dir(forecastJSON.daily[0].uvi)
+            displayCurrentWeather(data, forecastJSON.daily[0].uvi);
+            displayForecast(forecastJSON);
+        }
 
         var weatherResponseJSON = await weatherResponse.json();
-        displayWeather(weatherResponseJSON);        
-   }
+        displayWeather(weatherResponseJSON);
+    }
     //format the weather api url
     var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=0709fe582a3226805c5caaebd2b415a5'
 
@@ -37,7 +36,7 @@ var getUserWeather = async function (city) {
     var weatherResponse = await fetch(apiUrl)
     calcWeather(weatherResponse);
 
-     
+
 }
 
 
@@ -63,39 +62,33 @@ var formSubmitHandler = function (event) {
 
 //add city to search history
 var createHistory = function (city) {
-    
+
     //create an array of user entered cities to be stored as history
     var cityArray = JSON.parse(localStorage.getItem('cityHistory')) || [];
     cityArray.push(city);
 
     //save value of city array to localstorage
     localStorage.setItem('cityHistory', JSON.stringify(cityArray));
-    
+
     console.log(cityArray);
-    
+
     //retrieve array data from local storage and console.log
     var retrievedData = localStorage.getItem("cityHistory");
     var cityArray2 = JSON.parse(retrievedData);
 
-    //create loop to display????
-    // for ( i = 0; i < cityArray2.length; i++) {
+    //create div for each city search/display from array
+    var searchedCityEl = document.createElement('button');
+    searchedCityEl.classList = "city-item btn btn-secondary btn-lg btn-block"
+    searchedCityEl.textContent = city;
+    searchedCityEl.onclick = () => getUserWeather(city);
+    //append to searchHistory DOM
+    searchHistory.appendChild(searchedCityEl);
 
-        //create div for each city search/display from array
-        var searchedCityEl = document.createElement('button');
-        searchedCityEl.classList = "city-item"
-        searchedCityEl.textContent = city;
-        searchedCityEl.onclick = () => getUserWeather(city);
-        //append to searchHistory DOM
-        searchHistory.appendChild(searchedCityEl);
-
-        //event listener for search history buttons
-        //searchedCityEl.addEventListener("click", console.log("city"));
-    // }
 }
 
 
 //FUNCTION to display CURRENT WEATHER
-var displayCurrentWeather = function (weather , uvi) {
+var displayCurrentWeather = function (weather, uvi) {
     console.log(weather);
 
     // clear old content from container
@@ -119,7 +112,7 @@ var displayCurrentWeather = function (weather , uvi) {
     var tempInfo = weather.main.temp;
     var windInfo = weather.wind.speed;
     var humInfo = weather.main.humidity;
-    
+
     //UV info here
 
     //create container for current weather
@@ -128,6 +121,7 @@ var displayCurrentWeather = function (weather , uvi) {
 
     //create container for current city and date
     var currentCityEl = document.createElement("div");
+    currentCityEl.classList = 'card-title font-weight-bold';
     currentCityEl.textContent = cityInfo;
 
     //append to currentWeatherContainer DOM
@@ -144,7 +138,8 @@ var displayCurrentWeather = function (weather , uvi) {
 
     //create container for today's weather info
     var todaysWeatherInfoEl = document.createElement("div");
-    todaysWeatherInfoEl.textContent = 'Temp: ' + tempInfo + ' ' + 'Wind: ' + windInfo + ' ' + 'Humidity: ' + humInfo + 'UV: ' + uvi; 
+    todaysWeatherInfoEl.textContent = 'Temp: ' + tempInfo + ' ' + 'Wind: ' + windInfo + ' ' + 'Humidity: ' + humInfo + ' ' + 'UV: ' + uvi;
+
 
     //append to currentWeatherContainer DOM
     currentWeatherContainer.appendChild(todaysWeatherInfoEl);
